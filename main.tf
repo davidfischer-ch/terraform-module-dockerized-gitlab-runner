@@ -75,7 +75,7 @@ resource "docker_container" "runner" {
   # Cache
   volumes {
     container_path = local.container_cache_directory
-    host_path      = "${var.data_directory}/${var.identifier}/cache"
+    host_path      = local.host_cache_directory
     read_only      = false
   }
 

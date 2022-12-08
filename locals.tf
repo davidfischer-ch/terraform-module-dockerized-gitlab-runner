@@ -6,6 +6,7 @@ locals {
   container_certificates_directory = "${local.container_config_directory}/certs"
   container_scripts_directory      = "/scripts"
 
+  host_cache_directory   = "${var.data_directory}/${var.identifier}/cache"
   host_scripts_directory = "${var.data_directory}/${var.identifier}/scripts"
 
   env = merge(var.env, local.forced_env)
@@ -152,6 +153,7 @@ locals {
     formatlist("--docker-allowed-pull-policies=\"%s\"", var.jobs_allowed_pull_policies),
     formatlist("--docker-allowed-services=\"%s\"", var.jobs_allowed_services),
     formatlist("--docker-pull-policy=\"%s\"", var.jobs_pull_policy),
+    formatlist("--docker-volumes=\"%s\"", local.formatted_jobs_volumes),
     [
       "--docker-image=\"you-must-specify-image-in-cy\"",
       "--docker-privileged=${var.jobs_privileged}",
@@ -159,10 +161,15 @@ locals {
     ]
   )
 
-  formatted_jobs_env = [for k, v in merge(var.jobs_env, local.jobs_forced_env) : "\"${k}\"=\"${v}\""]
+  formatted_jobs_env     = [for k, v in merge(var.jobs_env, local.jobs_forced_env) : "\"${k}\"=\"${v}\""]
+  formatted_jobs_volumes = concat(var.jobs_volumes, local.jobs_forced_volumes)
 
   jobs_forced_env = {
     # Fix the helper image trying to write to / directory
     HOME = "/tmp"
   }
+
+  jobs_forced_volumes = [
+    "${local.host_cache_directory}:${local.container_cache_directory}:rw"
+  ]
 }

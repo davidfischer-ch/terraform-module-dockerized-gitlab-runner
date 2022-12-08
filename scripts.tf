@@ -34,6 +34,10 @@ ${join(" \\\n", formatlist("    %s", local.register_options))}
   sleep ${var.registration_interval}
 done
 
+echo "Drop duplicated /builds and /cache in generated configuration"
+echo "Fix https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2538"
+# Example : volumes = ["/data/gitlab-runner/cache:/cache:rw", "/cache"]
+
 echo "Start the runner"
 exec /entrypoint run --user=gitlab-runner --working-directory=${local.container_home_directory}
 EOT
