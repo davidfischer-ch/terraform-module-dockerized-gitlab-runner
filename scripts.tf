@@ -15,7 +15,7 @@ echo "Cleanup existing runners (if any)"
 ${local.container_scripts_directory}/cleanup
 
 echo "Copy configuration"
-cp $TEMPLATE_FILE $CONFIG_FILE
+cp "$TEMPLATE_FILE" "$CONFIG_FILE"
 
 # See https://docs.gitlab.com/runner/configuration/advanced-configuration.html
 
@@ -36,7 +36,8 @@ done
 
 echo "Drop duplicated /builds and /cache in generated configuration"
 echo "Fix https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2538"
-# Example : volumes = ["/data/gitlab-runner/cache:/cache:rw", "/cache"]
+# Example : volumes = ["/data/gitlab-runner/cache:/cache:rw", ..., "/builds", "/cache"]
+sed -i -e 's#volumes = .*#volumes = ${jsonencode(local.formatted_jobs_volumes)}#' "$CONFIG_FILE"
 
 echo "Start the runner"
 exec /entrypoint run --user=gitlab-runner --working-directory=${local.container_home_directory}
