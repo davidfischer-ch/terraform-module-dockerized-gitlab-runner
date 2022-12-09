@@ -2,10 +2,8 @@
 
 ## Finalize the first version
 
-- Use var.jobs_volumes
 - Ensure the following configuration:
   - Build jobs resources
-  - Build jobs volumes (cache, ...)
 - Check if the jobs can access the cache directory
 - Check if the build directory is used (if we want it)
 - Check if the runner can execute basic jobs
