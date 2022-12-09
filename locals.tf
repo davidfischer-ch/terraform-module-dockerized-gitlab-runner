@@ -6,6 +6,7 @@ locals {
   container_certificates_directory = "${local.container_config_directory}/certs"
   container_scripts_directory      = "/scripts"
 
+  host_builds_directory  = "${var.data_directory}/${var.identifier}/builds"
   host_cache_directory   = "${var.data_directory}/${var.identifier}/cache"
   host_scripts_directory = "${var.data_directory}/${var.identifier}/scripts"
 
@@ -161,7 +162,8 @@ locals {
     ]
   )
 
-  formatted_jobs_env     = [for k, v in merge(var.jobs_env, local.jobs_forced_env) : "\"${k}\"=\"${v}\""]
+  formatted_jobs_env = [for k, v in merge(var.jobs_env, local.jobs_forced_env) : "\"${k}\"=\"${v}\""]
+
   formatted_jobs_volumes = concat(var.jobs_volumes, local.jobs_forced_volumes)
 
   jobs_forced_env = {
@@ -170,6 +172,7 @@ locals {
   }
 
   jobs_forced_volumes = [
+    "${local.host_builds_directory}:${local.container_builds_directory}:rw",
     "${local.host_cache_directory}:${local.container_cache_directory}:rw"
   ]
 }
