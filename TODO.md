@@ -2,11 +2,6 @@
 
 ## Finalize the first version
 
-- Ensure the following configuration:
-  - Build jobs resources
-- Check if the jobs can access the cache directory
-- Check if the build directory is used (if we want it)
-- Check if the runner can execute basic jobs
 - Document multiple example usages in README
 - Document behavior (start, stop, cleanup, ...)
 - Document directories
