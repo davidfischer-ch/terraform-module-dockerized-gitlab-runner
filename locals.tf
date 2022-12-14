@@ -10,6 +10,8 @@ locals {
   host_cache_directory   = "${var.data_directory}/${var.identifier}/cache"
   host_scripts_directory = "${var.data_directory}/${var.identifier}/scripts"
 
+  access_level = "${var.jobs_protected ? "ref" : "not"}_protected"
+
   env = merge(var.env, local.forced_env)
 
   forced_env = {
@@ -135,7 +137,7 @@ locals {
     [
       "--non-interactive",
       "--name=\"${var.identifier}\"",
-      "--access-level=\"${var.jobs_protected ? "ref" : "not"}_protected\"",
+      # "--access-level=\"${local.access_level}\"",
       "--builds-dir=\"${local.container_builds_directory}\"",
       "--cache-dir=\"${local.container_cache_directory}\"",
       "--leave-runner=false",
