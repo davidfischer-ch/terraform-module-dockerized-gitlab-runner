@@ -37,15 +37,9 @@ variable "env" {
   description = "Define or overwrite environment variables for the runner (not the jobs)."
 }
 
-variable "image_url" {
+variable "image_id" {
   type        = string
-  default     = "gitlab/gitlab-runner"
-  description = "Runner image's URL"
-}
-
-variable "image_tag" {
-  type        = string
-  description = "Runner image's version (e.g. \"alpine-v12.7.1\")"
+  description = "Runner image's ID."
 }
 
 # Resources ----------------------------------------------------------------------------------------
