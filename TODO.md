@@ -13,6 +13,5 @@
 
 ## Features
 
-- Implement mode were image is not managed (e.g. if running multiple instances on same machine)
 - Implement a persistent mode (e.g. to prevent registering every time the runner is restarted)
 - Cleanup runner on stop (related: https://github.com/FlakM/gitlab-runner-auto-register)

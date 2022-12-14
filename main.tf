@@ -1,7 +1,3 @@
-resource "docker_image" "runner" {
-  name = "${var.image_url}:${var.image_tag}"
-}
-
 resource "docker_container" "runner" {
 
   lifecycle {
@@ -14,7 +10,7 @@ resource "docker_container" "runner" {
   }
 
   entrypoint = ["/bin/bash", "${local.container_scripts_directory}/entrypoint"]
-  image      = docker_image.runner.image_id
+  image      = var.image_id
   name       = var.identifier
 
   must_run = var.enabled

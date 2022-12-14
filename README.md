@@ -46,6 +46,10 @@ data "gitlab_group" "example" {
   full_path = "example"
 }
 
+resource "docker_image" "runner" {
+  name = "gitlab/gitlab-runner:latest"
+}
+
 module "runner" {
 
   source = "git@github.com:davidfischer-ch/terraform-module-dockerized-gitlab-runner.git?ref=main"
@@ -55,9 +59,9 @@ module "runner" {
 
   labels = {}
 
-  enabled   = true
-  paused    = false
-  image_tag = "latest"
+  enabled  = true
+  paused   = false
+  image_id = docker_image.runner.image_id
 
   data_directory = "/data"
 
