@@ -1,11 +1,21 @@
+resource "gitlab_runner" "runner" {
+  access_level       = local.access_level
+  description        = var.description
+  locked             = var.jobs_locked
+  maximum_timeout    = var.jobs_timeout
+  paused             = var.paused
+  registration_token = var.registration_token
+  run_untagged       = var.jobs_run_untagged
+  tag_list           = var.jobs_tags
+}
+
 resource "docker_container" "runner" {
 
   lifecycle {
     replace_triggered_by = [
-      local_file.config_template,
-      local_file.check_live_script,
-      local_file.cleanup_script,
-      local_file.entrypoint_script
+      local_file.config,
+      local_file.check_live,
+      local_file.entrypoint
     ]
   }
 
@@ -25,7 +35,7 @@ resource "docker_container" "runner" {
 
   # https://docs.gitlab.com/runner/commands/#signals
   stop_signal  = "SIGQUIT"
-  stop_timeout = var.stop_timeout
+  stop_timeout = var.jobs_timeout
 
   env = formatlist("%s=%s", keys(local.env), values(local.env))
 
@@ -79,13 +89,6 @@ resource "docker_container" "runner" {
   volumes {
     container_path = local.container_config_directory
     host_path      = "${var.data_directory}/${var.identifier}/config"
-    read_only      = false
-  }
-
-  # Certificates
-  volumes {
-    container_path = local.container_certificates_directory
-    host_path      = "${var.data_directory}/${var.identifier}/certificates"
     read_only      = true
   }
 
