@@ -23,7 +23,7 @@ variable "labels" {
 
 variable "enabled" {
   type        = bool
-  description = "Toggle the runner (started or stopped)."
+  description = "Toggle the runner container (started or stopped)."
 }
 
 variable "paused" {
@@ -68,15 +68,6 @@ variable "swap" {
   description = "Amount of SWAP (MBs) each runner can use."
 }
 
-variable "stop_timeout" {
-  type        = number
-  default     = 3600
-  description = <<EOT
-    Gives the jobs time to complete (in seconds).
-    See https://docs.gitlab.com/runner/commands/#signals.
-EOT
-}
-
 # Storage ------------------------------------------------------------------------------------------
 
 variable "data_directory" {
@@ -85,53 +76,29 @@ variable "data_directory" {
 
 # Registration -------------------------------------------------------------------------------------
 
-variable "gitlab_server_url" {
+variable "server_url" {
   type        = string
-  description = "URL du serveur GitLab sur lequel s'enregistrer."
+  description = "The GitLab server's URL."
+}
+
+variable "server_ca_cert" {
+  type        = string
+  default     = null
+  description = "The GitLab server's custom CA certificate (content)."
 }
 
 variable "registration_url" {
   type        = string
-  description = "Were the runner is registered (for documentation purposes)."
-}
-
-variable "registration_interval" {
-  type        = number
-  default     = 5
-  description = "Interval between two registration attempts to the GitLab server."
-}
-
-variable "registration_retries" {
-  type        = number
-  default     = 30
-  description = "Maximum registration attempts before declaring the runner in a failed state."
+  description = "Where the runner is registered (for documentation purposes)."
 }
 
 variable "registration_token" {
   type        = string
-  default     = ""
   description = <<EOT
     Token used to register the runner into a project, group or even the instace of GitLab server.
     See https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens.
   EOT
-  sensitive   = true
-}
-
-variable "token" {
-  type        = string
-  default     = ""
-  description = <<EOT
-    For the rare cases when you want to use an already optained runner's authentication token.
-    See https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens.
-  EOT
-  sensitive   = true
-}
-
-# Workaround to validate either registration_token or token is set
-# See https://www.linkedin.com/pulse/devops-how-do-assertion-test-terraform-template-jamie-nelson/
-data "external" "registration_token_not_empty" {
-  count   = var.registration_token == "" && var.token == "" ? 1 : 0
-  program = ["Error: One of registration_token or token must be set."]
+  sensitive = true
 }
 
 # Global Settings ----------------------------------------------------------------------------------
@@ -206,7 +173,7 @@ variable "metrics_port" {
 # Jobs Core Settings -------------------------------------------------------------------------------
 # https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
 
-variable "jobs_concurrency" { # TODO_USE_IT
+variable "jobs_concurrency" {
   type        = number
   default     = 0 # jobs
   description = <<EOT
@@ -269,6 +236,15 @@ variable "jobs_tags" {
   EOT
 }
 
+variable "jobs_timeout" {
+  type        = number
+  default     = 3600
+  description = <<EOT
+    Gives the jobs time to complete (in seconds).
+    See https://docs.gitlab.com/ee/api/runners.html.
+  EOT
+}
+
 # Jobs Docker Executor Settings --------------------------------------------------------------------
 # https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
 
@@ -307,7 +283,7 @@ variable "jobs_privileged" {
   description = "Grant privileged mode to the build container and all services."
 }
 
-variable "jobs_volumes" { # TODO_USE_IT
+variable "jobs_volumes" {
   type    = list(string)
   default = []
 }
