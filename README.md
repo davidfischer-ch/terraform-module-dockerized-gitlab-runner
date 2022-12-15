@@ -4,8 +4,6 @@ A dockerized GitLab Runner that runs the jobs with the [Docker Executor](https:/
 
 WARNING: BETA STATUS!
 
-See the [TODO.md](TODO.md).
-
 ## Features
 
 This module handles properly and without side effects:
