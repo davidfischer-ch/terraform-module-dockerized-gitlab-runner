@@ -2,9 +2,27 @@
 
 A dockerized GitLab Runner that runs the jobs with the [Docker Executor](https://docs.gitlab.com/runner/executors/docker.html).
 
-WARNING: ALPHA STATUS!
+WARNING: BETA STATUS!
 
 See the [TODO.md](TODO.md).
+
+## Features
+
+This module handles properly and without side effects:
+
+* Any change in configuration will be reflected to the appropriate resources and by the way handled properly
+* The runner is registered once at creation time (you can taint the module's resource `gitlab_runer.runner` to force re-registration)
+* The runner is unregistered at destruction time (ensuring proper cleanup, your GitLab's administrators will thank you for this)
+* The authentication token is not hardcoded in the `config.toml` but exposed as an environment variable
+
+## What's Next
+
+We will have to work on the following topics (not in any particular order):
+
+* Add more document (behavior, directories, limitations)
+* Add some examples with multiple runners with/without "count"
+* Manage more [configuration parameters](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section)
+* [Next GitLab Runner Token Architecture](https://docs.gitlab.com/ee/architecture/blueprints/runner_tokens/)
 
 ## Example
 
@@ -67,7 +85,8 @@ module "runner" {
 
   # Registration
 
-  gitlab_server_url  = local.gitlab_server_url
+  server_url         = local.gitlab_server_url
+  server_ca_cert     = null # Optional, e.g. file("my-server-ca.crt")
   registration_url   = data.gitlab_group.example.web_url
   registration_token = data.gitlab_group.example.runners_token
 
@@ -101,15 +120,12 @@ Data directory will contain something like this:
 /data/my-runner/
 ├── builds
 ├── cache
-├── certificates
 ├── config
 │   ├── certs
 │   └── config.toml
 └── scripts
     ├── check-live
-    ├── cleanup
-    ├── config.toml
     └── entrypoint
 
-6 directories, 5 files
+5 directories, 4 files
 ```
