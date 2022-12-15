@@ -157,7 +157,7 @@ variable "debug_enabled" {
 
 variable "metrics_enabled" {
   type        = bool
-  default     = true
+  default     = false
   description = <<EOT
     Toggle the Prometheus metrics exporter integrated to the runner.
     See https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server.
