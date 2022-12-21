@@ -250,7 +250,7 @@ variable "jobs_timeout" {
 
 variable "jobs_allowed_images" {
   type        = list(string)
-  default     = ["*"]
+  default     = ["*/*:*"]
   description = <<EOT
     Restrict the source from where the images can be pulled (using wildcard patterns).
     See https://docs.gitlab.com/runner/executors/docker.html#restrict-docker-pull-policies.
@@ -265,7 +265,7 @@ variable "jobs_allowed_pull_policies" {
 
 variable "jobs_allowed_services" {
   type        = list(string)
-  default     = ["*"]
+  default     = ["*/*:*"]
   description = "https://docs.gitlab.com/runner/executors/docker.html#restrict-docker-pull-policies"
 }
 
