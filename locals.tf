@@ -1,14 +1,14 @@
 locals {
-  container_home_directory         = "/home/gitlab-runner"
-  container_builds_directory       = "/builds"
-  container_cache_directory        = "/cache"
-  container_config_directory       = "${local.container_home_directory}/.gitlab-runner"
-  container_scripts_directory      = "/scripts"
+  container_home_directory    = "/home/gitlab-runner"
+  container_builds_directory  = "/builds"
+  container_cache_directory   = "/cache"
+  container_config_directory  = "${local.container_home_directory}/.gitlab-runner"
+  container_scripts_directory = "/scripts"
 
-  host_builds_directory       = "${var.data_directory}/${var.identifier}/builds"
-  host_cache_directory        = "${var.data_directory}/${var.identifier}/cache"
-  host_config_directory       = "${var.data_directory}/${var.identifier}/config"
-  host_scripts_directory      = "${var.data_directory}/${var.identifier}/scripts"
+  host_builds_directory  = "${var.data_directory}/builds"
+  host_cache_directory   = "${var.data_directory}/cache"
+  host_config_directory  = "${var.data_directory}/config"
+  host_scripts_directory = "${var.data_directory}/scripts"
 
   access_level = "${var.jobs_protected ? "ref" : "not"}_protected"
 
