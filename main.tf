@@ -74,7 +74,7 @@ resource "docker_container" "runner" {
   # Builds
   volumes {
     container_path = local.container_builds_directory
-    host_path      = "${var.data_directory}/${var.identifier}/builds"
+    host_path      = local.host_builds_directory
     read_only      = false
   }
 
@@ -88,7 +88,7 @@ resource "docker_container" "runner" {
   # Configuration
   volumes {
     container_path = local.container_config_directory
-    host_path      = "${var.data_directory}/${var.identifier}/config"
+    host_path      = local.host_config_directory
     read_only      = true
   }
 
