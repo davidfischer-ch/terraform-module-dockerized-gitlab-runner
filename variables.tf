@@ -71,7 +71,8 @@ variable "swap" {
 # Storage ------------------------------------------------------------------------------------------
 
 variable "data_directory" {
-  type = string
+  type        = string
+  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
 # Registration -------------------------------------------------------------------------------------
