@@ -21,9 +21,9 @@ listen_address = "[::]:9252"
   name = "${var.identifier}"
   url = "${var.server_url}"
   token = "__RUNNER_TOKEN__"
-  %{ if var.server_ca_cert != null }
+  %{if var.server_ca_cert != null}
   tls-ca-file="${local.container_config_directory}/certs/server-ca.crt"
-  %{ endif }
+  %{endif}
   limit = ${var.jobs_concurrency}
   executor = "docker"
   builds_dir = "${local.container_builds_directory}"
