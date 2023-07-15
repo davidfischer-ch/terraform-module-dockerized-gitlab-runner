@@ -98,7 +98,7 @@ variable "registration_token" {
     Token used to register the runner into a project, group or even the instace of GitLab server.
     See https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens.
   EOT
-  sensitive = true
+  sensitive   = true
 }
 
 # Global Settings ----------------------------------------------------------------------------------
