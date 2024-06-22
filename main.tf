@@ -1,3 +1,5 @@
+# This resource has been deprecated in favor of the `gitlab_user_runner` resource. Please use that resource, and the new registration flow, instead.
+
 resource "gitlab_runner" "runner" {
   access_level       = local.access_level
   description        = var.description
