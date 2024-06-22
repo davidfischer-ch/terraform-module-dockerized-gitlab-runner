@@ -46,16 +46,44 @@ terraform {
   }
 }
 
+variable "remote_ssh_host" {
+  type = string
+}
+
+variable "remote_ssh_port" {
+  type    = number
+  default = 22
+}
+
+variable "remote_ssh_user" {
+  type = string
+}
+
+locals {
+  gitlab_server_url = "https://gitlab.example.com"
+}
+
 provider "docker" {
-  host = "unix:///var/run/docker.sock"
+  host     = "ssh://${var.remote_ssh_user}@${var.remote_ssh_host}:${var.remote_ssh_port}"
+  ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
+
+  registry_auth {
+    address = "registry.fisch3r.net"
+  }
 }
 
 provider "gitlab" {
   base_url = local.gitlab_server_url
 }
 
-locals {
-  gitlab_server_url = "https://gitlab.example.com"
+provider "system" {
+  ssh {
+    host        = var.remote_ssh_host
+    port        = var.remote_ssh_port
+    user        = var.remote_ssh_user
+    private_key = file("~/.ssh/id_rsa")
+  }
+  sudo = true
 }
 
 data "gitlab_group" "example" {
