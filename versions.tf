@@ -12,9 +12,9 @@ terraform {
       version = ">= 16.8.1"
     }
 
-    local = {
-      source  = "hashicorp/local"
-      version = ">= 2.4.1"
+    system = {
+      source  = "neuspaces/system"
+      version = ">= 0.5.0"
     }
   }
 }

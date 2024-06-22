@@ -1,7 +1,8 @@
-resource "local_file" "config" {
-  filename             = "${local.host_config_directory}/config.toml"
-  file_permission      = "0644"
-  directory_permission = "0755"
+resource "system_file" "config" {
+  path = "${system_folder.config.path}/config.toml"
+  uid  = 0
+  gid  = 0
+  mode = "644"
 
   content = <<EOT
 concurrent       = ${var.concurrency}
@@ -54,13 +55,14 @@ listen_address = "[::]:9252"
 EOT
 }
 
-resource "local_sensitive_file" "server_ca_cert" {
+resource "system_file" "server_ca_cert" {
   # Marked as sensitive also to hide its content on diff
   count = var.server_ca_cert == null ? 0 : 1
 
-  filename             = "${local.host_config_directory}/certs/server-ca.crt"
-  file_permission      = "0644"
-  directory_permission = "0755"
+  path = "${system_folder.config.path}/certs/server-ca.crt"
+  uid  = 0
+  gid  = 0
+  mode = "644"
 
-  content = var.server_ca_cert
+  content_sensitive = var.server_ca_cert
 }

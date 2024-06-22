@@ -1,7 +1,8 @@
-resource "local_file" "entrypoint" {
-  filename             = "${local.host_scripts_directory}/entrypoint"
-  file_permission      = "0755"
-  directory_permission = "0755"
+resource "system_file" "entrypoint" {
+  path = "${system_folder.scripts.path}/entrypoint"
+  uid  = 0
+  gid  = 0
+  mode = "755"
 
   content = <<EOT
 #!/bin/bash
@@ -18,10 +19,11 @@ exec /entrypoint run \
 EOT
 }
 
-resource "local_file" "check_live" {
-  filename             = "${local.host_scripts_directory}/check-live"
-  file_permission      = "0755"
-  directory_permission = "0755"
+resource "system_file" "check_live" {
+  path = "${system_folder.scripts.path}/check-live"
+  uid  = 0
+  gid  = 0
+  mode = "755"
 
   content = <<EOT
 #!/bin/bash

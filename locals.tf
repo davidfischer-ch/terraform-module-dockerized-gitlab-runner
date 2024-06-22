@@ -5,11 +5,6 @@ locals {
   container_config_directory  = "${local.container_home_directory}/.gitlab-runner"
   container_scripts_directory = "/scripts"
 
-  host_builds_directory  = "${var.data_directory}/builds"
-  host_cache_directory   = "${var.data_directory}/cache"
-  host_config_directory  = "${var.data_directory}/config"
-  host_scripts_directory = "${var.data_directory}/scripts"
-
   access_level = "${var.jobs_protected ? "ref" : "not"}_protected"
 
   env = merge(var.env, {
@@ -25,7 +20,7 @@ locals {
   })
 
   jobs_volumes = concat(var.jobs_volumes, [
-    "${local.host_builds_directory}:${local.container_builds_directory}:rw",
-    "${local.host_cache_directory}:${local.container_cache_directory}:rw"
+    "${system_folder.builds.path}:${local.container_builds_directory}:rw",
+    "${system_folder.cache.path}:${local.container_cache_directory}:rw"
   ])
 }

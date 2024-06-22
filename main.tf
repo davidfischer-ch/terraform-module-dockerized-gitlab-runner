@@ -13,9 +13,10 @@ resource "docker_container" "runner" {
 
   lifecycle {
     replace_triggered_by = [
-      local_file.config,
-      local_file.check_live,
-      local_file.entrypoint
+      system_file.config,
+      system_file.check_live,
+      system_file.entrypoint,
+      # system_file.server_ca_cert
     ]
   }
 
@@ -74,28 +75,28 @@ resource "docker_container" "runner" {
   # Builds
   volumes {
     container_path = local.container_builds_directory
-    host_path      = local.host_builds_directory
+    host_path      = system_folder.builds.path
     read_only      = false
   }
 
   # Cache
   volumes {
     container_path = local.container_cache_directory
-    host_path      = local.host_cache_directory
+    host_path      = system_folder.cache.path
     read_only      = false
   }
 
   # Configuration
   volumes {
     container_path = local.container_config_directory
-    host_path      = local.host_config_directory
+    host_path      = system_folder.config.path
     read_only      = true
   }
 
   # Scripts
   volumes {
     container_path = local.container_scripts_directory
-    host_path      = local.host_scripts_directory
+    host_path      = system_folder.scripts.path
     read_only      = true
   }
 }
