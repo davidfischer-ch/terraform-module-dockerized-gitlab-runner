@@ -43,6 +43,7 @@ listen_address = "[::]:9252"
     allowed_services = ${jsonencode(var.jobs_allowed_services)}
     disable_cache = false
     disable_entrypoint_overwrite = false
+    extra_hosts = ${jsonencode(local.jobs_extra_hosts)}
     image = "you-must-specify-image-in-cy"
     oom_kill_disable = false
     privileged = ${var.jobs_privileged}

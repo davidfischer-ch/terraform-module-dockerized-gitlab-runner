@@ -24,6 +24,8 @@ locals {
     HOME = "/tmp"
   })
 
+  jobs_extra_hosts = [for host, ip in var.jobs_extra_hosts : "${host}:${ip}"]
+
   jobs_volumes = concat(var.jobs_volumes, [
     "${local.host_builds_directory}:${local.container_builds_directory}:rw",
     "${local.host_cache_directory}:${local.container_cache_directory}:rw"

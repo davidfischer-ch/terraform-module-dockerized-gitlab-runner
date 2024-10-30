@@ -201,6 +201,12 @@ variable "jobs_env" {
 EOT
 }
 
+variable "jobs_extra_hosts" {
+  type        = map(string)
+  default     = {}
+  description = "Hosts that should be defined in container environment."
+}
+
 variable "jobs_locked" {
   type        = bool
   default     = true
