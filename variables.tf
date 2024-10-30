@@ -37,12 +37,6 @@ variable "env" {
   description = "Define or overwrite environment variables for the runner (not the jobs)."
 }
 
-variable "hosts" {
-  type        = map(string)
-  default     = {}
-  description = "Set additional hosts (fqdn -> ip)."
-}
-
 variable "image_id" {
   type        = string
   description = "Runner image's ID."
@@ -72,6 +66,14 @@ variable "swap" {
   type        = number
   default     = 128
   description = "Amount of SWAP (MBs) each runner can use."
+}
+
+# Networking ---------------------------------------------------------------------------------------
+
+variable "hosts" {
+  type        = map(string)
+  default     = {}
+  description = "Add entries to container hosts file."
 }
 
 # Storage ------------------------------------------------------------------------------------------
