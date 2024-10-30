@@ -37,6 +37,12 @@ variable "env" {
   description = "Define or overwrite environment variables for the runner (not the jobs)."
 }
 
+variable "hosts" {
+  type        = map(string)
+  default     = {}
+  description = "Set additional hosts (fqdn -> ip)."
+}
+
 variable "image_id" {
   type        = string
   description = "Runner image's ID."

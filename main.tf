@@ -39,6 +39,14 @@ resource "docker_container" "runner" {
 
   env = formatlist("%s=%s", keys(local.env), values(local.env))
 
+  dynamic "host" {
+    for_each = var.hosts
+    content {
+      host = host.key
+      ip   = host.value
+    }
+  }
+
   dynamic "labels" {
     for_each = var.labels
     content {
