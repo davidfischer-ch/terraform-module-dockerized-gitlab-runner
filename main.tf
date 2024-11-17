@@ -100,6 +100,13 @@ resource "docker_container" "runner" {
     read_only      = true
   }
 
+  # Data
+  volumes {
+    container_path = local.container_data_directory
+    host_path      = linux_folder.jobs_data.path
+    read_only      = false
+  }
+
   # Scripts
   volumes {
     container_path = local.container_scripts_directory
