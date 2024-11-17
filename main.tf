@@ -103,7 +103,7 @@ resource "docker_container" "runner" {
   # Data
   volumes {
     container_path = local.container_data_directory
-    host_path      = linux_folder.jobs_data.path
+    host_path      = local.host_data_directory
     read_only      = false
   }
 

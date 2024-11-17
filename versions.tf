@@ -12,12 +12,6 @@ terraform {
       version = ">= 16.8.1"
     }
 
-    linux = {
-      # https://github.com/mavidser/terraform-provider-linux/tags
-      source  = "mavidser/linux"
-      version = ">= 1.0.2"
-    }
-
     local = {
       source  = "hashicorp/local"
       version = ">= 2.4.1"
