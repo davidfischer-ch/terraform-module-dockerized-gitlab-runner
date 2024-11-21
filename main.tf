@@ -79,35 +79,35 @@ resource "docker_container" "runner" {
     read_only      = false
   }
 
-  # Builds
+  # Builds owner root:root
   volumes {
     container_path = local.container_builds_directory
     host_path      = local.host_builds_directory
     read_only      = false
   }
 
-  # Cache
+  # Cache owner root:root
   volumes {
     container_path = local.container_cache_directory
     host_path      = local.host_cache_directory
     read_only      = false
   }
 
-  # Configuration
+  # Configuration owner root:root
   volumes {
     container_path = local.container_config_directory
     host_path      = local.host_config_directory
     read_only      = true
   }
 
-  # Scripts
+  # Scripts owner root:root
   volumes {
     container_path = local.container_scripts_directory
     host_path      = local.host_scripts_directory
     read_only      = true
   }
 
-  # Storage
+  # Storage owner root:root mode 1777
   volumes {
     container_path = local.container_storage_directory
     host_path      = local.host_storage_directory
