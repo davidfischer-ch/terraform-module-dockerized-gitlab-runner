@@ -11,14 +11,3 @@ resource "gitlab_user_runner" "self" {
   tag_list        = var.jobs_tags
   untagged        = var.jobs_run_untagged
 }
-
-/*resource "gitlab_runner" "runner" {
-  access_level       = local.access_level
-  description        = var.description
-  locked             = var.jobs_locked
-  maximum_timeout    = var.jobs_timeout
-  paused             = var.paused
-  registration_token = var.registration_token
-  run_untagged       = var.jobs_run_untagged
-  tag_list           = var.jobs_tags
-}*/
