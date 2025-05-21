@@ -85,8 +85,9 @@ module "runner" {
 
   server_url         = local.gitlab_server_url
   server_ca_cert     = null # Optional, e.g. file("my-server-ca.crt")
-  registration_url   = data.gitlab_group.example.web_url
-  registration_token = data.gitlab_group.example.runners_token
+
+  runner_type = "group"
+  group_id    = data.gitlab_group.example.id
 
   # Global Settings
 
