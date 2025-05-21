@@ -12,11 +12,9 @@ locals {
   host_scripts_directory = "${var.data_directory}/scripts"
   host_storage_directory = "${var.data_directory}/storage"
 
-  access_level = "${var.jobs_protected ? "ref" : "not"}_protected"
-
   env = merge(var.env, {
     HOME          = local.container_home_directory
-    RUNNER_TOKEN  = gitlab_runner.runner.authentication_token
+    RUNNER_TOKEN  = gitlab_user_runner.self.token
     TEMPLATE_FILE = "${local.container_config_directory}/config.toml"
     CONFIG_FILE   = "/tmp/config.toml"
   })

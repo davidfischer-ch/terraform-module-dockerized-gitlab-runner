@@ -85,6 +85,30 @@ variable "data_directory" {
 
 # Registration -------------------------------------------------------------------------------------
 
+variable "runner_type" {
+  type        = string
+  description = <<EOT
+    Runner type (instance, group or project).
+    See https://registry.terraform.io/providers/gitlabhq/gitlab/latest/docs/resources/user_runner.
+  EOT
+  validation {
+    condition      = contains(["instance", "group", "project"], var.runner_type)
+    error_mnessage = "Argument `runner_type` must be either \"instance\", \"group\" or \"project\"."
+  }
+}
+
+variable "group_id" {
+  type        = string
+  description = "Group where to register the runner (only for group type)."
+  default     = null
+}
+
+variable "project_id" {
+  type        = string
+  description = "Project where to register the runner (only for project type)."
+  default     = null
+}
+
 variable "server_url" {
   type        = string
   description = "The GitLab server's URL."
@@ -94,20 +118,6 @@ variable "server_ca_cert" {
   type        = string
   default     = null
   description = "The GitLab server's custom CA certificate (content)."
-}
-
-variable "registration_url" {
-  type        = string
-  description = "Where the runner is registered (for documentation purposes)."
-}
-
-variable "registration_token" {
-  type        = string
-  description = <<EOT
-    Token used to register the runner into a project, group or even the instace of GitLab server.
-    See https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens.
-  EOT
-  sensitive   = true
 }
 
 # Global Settings ----------------------------------------------------------------------------------
