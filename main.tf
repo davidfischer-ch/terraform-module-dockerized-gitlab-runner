@@ -44,6 +44,8 @@ resource "docker_container" "runner" {
     }
   }
 
+  network_mode = "bridge"
+
   dynamic "ports" {
     for_each = var.metrics_enabled ? ["it is :)"] : []
     content {
