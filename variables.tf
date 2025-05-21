@@ -92,8 +92,8 @@ variable "runner_type" {
     See https://registry.terraform.io/providers/gitlabhq/gitlab/latest/docs/resources/user_runner.
   EOT
   validation {
-    condition      = contains(["instance", "group", "project"], var.runner_type)
-    error_mnessage = "Argument `runner_type` must be either \"instance\", \"group\" or \"project\"."
+    condition     = contains(["instance", "group", "project"], var.runner_type)
+    error_message = "Argument `runner_type` must be either \"instance\", \"group\" or \"project\"."
   }
 }
 
