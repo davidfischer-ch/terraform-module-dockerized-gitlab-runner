@@ -68,8 +68,8 @@ resource "docker_image" "runner" {
 
 module "runner" {
 
-  source = "git@github.com:davidfischer-ch/terraform-module-dockerized-gitlab-runner.git?ref=main"
-  # Or ... source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-gitlab-runner.git?ref=main"
+  source = "git@github.com:davidfischer-ch/terraform-module-dockerized-gitlab-runner.git?ref=2.0.0"
+  # Or ... source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-gitlab-runner.git?ref=2.0.0"
 
   identifier  = "my-runner"
   description = "Dockerized runner hosted on my computer for testing purposes"
