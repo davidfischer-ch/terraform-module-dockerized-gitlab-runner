@@ -24,6 +24,8 @@ We will have to work on the following topics (not in any particular order):
 
 ## Example
 
+See [examples/default](examples/default) for a complete working configuration.
+
 ```
 terraform {
   required_version = ">= 1.3"
