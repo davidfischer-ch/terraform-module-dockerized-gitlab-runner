@@ -23,6 +23,7 @@ variable "labels" {
 
 variable "enabled" {
   type        = bool
+  default     = true
   description = "Toggle the runner container (started or stopped)."
 }
 
