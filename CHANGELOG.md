@@ -1,5 +1,18 @@
 # Changelog
 
+## Release v2.1.0 (2026-03-13)
+
+### Minor compatibility breaks
+
+* Change `log_level` default from `"info"` to `"warn"`
+
+### Fix and enhancements
+
+* Set `enabled` default to `true`, `paused` default to `false`
+* Rewrite README to match module conventions
+* Refine variable descriptions, validators, and attribute ordering
+* Remove redundant default values from examples
+
 ## Release v2.0.1 (2026-03-13)
 
 ### Fix and enhancements
