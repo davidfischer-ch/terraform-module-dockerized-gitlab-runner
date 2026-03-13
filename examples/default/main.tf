@@ -8,7 +8,7 @@ data "gitlab_group" "runner" {
 }
 
 module "runner" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-gitlab-runner.git?ref=2.0.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-gitlab-runner.git?ref=2.1.1"
 
   identifier  = "my-runner"
   description = "Dockerized runner for CI/CD jobs."
