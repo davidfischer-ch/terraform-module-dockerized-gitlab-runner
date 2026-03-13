@@ -1,5 +1,12 @@
 # Changelog
 
+## Release v2.0.1 (2026-03-13)
+
+### Fix and enhancements
+
+* Drop commented-out dead code (old registration token resource)
+* Add examples
+
 ## Release v2.0.0 (2025-05-21)
 
 ### Major compatibility breaks
