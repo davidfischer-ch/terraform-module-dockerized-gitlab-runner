@@ -31,6 +31,7 @@ variable "enabled" {
 variable "paused" {
   type        = bool
   description = "Pause the runner (do not process jobs)."
+  default     = false
 }
 
 variable "env" {
@@ -182,10 +183,10 @@ variable "log_format" {
 variable "log_level" {
   type        = string
   description = <<EOT
-    Defines the log level.
+    Defines the log level (default: "warn").
     See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section.
   EOT
-  default     = "info"
+  default     = "warn"
 
   validation {
     condition     = contains(["debug", "info", "warn", "error", "fatal", "panic"], var.log_level)
