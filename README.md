@@ -90,6 +90,7 @@ data_directory/
 | `memory` | `number` | `512` | Memory limit in MB (minimum 64). |
 | `swap` | `number` | `128` | Swap limit in MB. |
 | `hosts` | `map(string)` | `{}` | Extra `/etc/hosts` entries for the container. |
+| `metrics_port` | `number` | `9252` | Host port for Prometheus metrics. |
 | `data_directory` | `string` | — | Host path for persistent volumes. |
 | `runner_type` | `string` | — | Runner scope: `instance`, `group`, or `project`. |
 | `group_id` | `string` | `null` | Group ID (group runners only). |
@@ -102,7 +103,6 @@ data_directory/
 | `log_level` | `string` | `"warn"` | Log level (`debug`, `info`, `warn`, `error`, `fatal`, `panic`). |
 | `debug_enabled` | `bool` | `false` | Enable debugging mode. |
 | `metrics_enabled` | `bool` | `false` | Enable Prometheus metrics exporter. |
-| `metrics_port` | `number` | `9252` | Host port for Prometheus metrics. |
 | `jobs_concurrency` | `number` | `0` | Max concurrent jobs for this runner (0 = unlimited). |
 | `jobs_env` | `map(string)` | `{}` | Environment variables injected into jobs. |
 | `jobs_extra_hosts` | `map(string)` | `{}` | Extra hosts defined in the job container environment. |

@@ -20,8 +20,6 @@ variable "labels" {
   description = "Labels attached to runner container."
 }
 
-# Application --------------------------------------------------------------------------------------
-
 variable "enabled" {
   type        = bool
   description = "Toggle the runner container (started or stopped)."
@@ -87,6 +85,17 @@ variable "hosts" {
   type        = map(string)
   description = "Add entries to container hosts file."
   default     = {}
+}
+
+variable "metrics_port" {
+  type        = number
+  description = "Host port used to expose the runner's Prometheus metrics exporter."
+  default     = 9252
+
+  validation {
+    condition     = var.metrics_port >= 1 && var.metrics_port <= 65535
+    error_message = "Argument `metrics_port` must be between 1 and 65535."
+  }
 }
 
 # Storage ------------------------------------------------------------------------------------------
@@ -207,17 +216,6 @@ variable "metrics_enabled" {
     See https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server.
   EOT
   default     = false
-}
-
-variable "metrics_port" {
-  type        = number
-  description = "Host port used to expose the runner's Prometheus metrics exporter."
-  default     = 9252
-
-  validation {
-    condition     = var.metrics_port >= 1 && var.metrics_port <= 65535
-    error_message = "Argument `metrics_port` must be between 1 and 65535."
-  }
 }
 
 # Jobs Core Settings -------------------------------------------------------------------------------

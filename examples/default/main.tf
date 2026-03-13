@@ -16,6 +16,8 @@ module "runner" {
   labels   = {}
   image_id = docker_image.runner.image_id
 
+  # Storage
+
   data_directory = "/data/my-runner"
 
   # Registration
@@ -24,12 +26,12 @@ module "runner" {
   runner_type = "group"
   group_id    = data.gitlab_group.runner.id
 
-  # Global settings
+  # Global Settings
 
   concurrency = 4
   log_level   = "info"
 
-  # Jobs core settings
+  # Jobs Core Settings
 
   jobs_protected = false
 
