@@ -28,6 +28,23 @@ locals {
 
   jobs_extra_hosts = [for host, ip in var.jobs_extra_hosts : "${host}:${ip}"]
 
+  # The [runners.docker] resource keys that are set, as the runner types them: memory and CPUs as
+  # strings, CPU shares as an integer.
+  jobs_resources = {
+    for key, value in {
+      cgroup_parent         = var.jobs_cgroup_parent
+      cpu_shares            = var.jobs_cpu_shares
+      cpus                  = var.jobs_cpus == null ? null : tostring(var.jobs_cpus)
+      memory                = var.jobs_memory == null ? null : "${var.jobs_memory}m"
+      memory_swap           = var.jobs_memory_swap == null ? null : "${var.jobs_memory_swap}m"
+      service_cgroup_parent = var.jobs_cgroup_parent
+      service_cpu_shares    = var.jobs_services_cpu_shares
+      service_cpus          = var.jobs_services_cpus == null ? null : tostring(var.jobs_services_cpus)
+      service_memory        = var.jobs_services_memory == null ? null : "${var.jobs_services_memory}m"
+      service_memory_swap   = var.jobs_services_memory_swap == null ? null : "${var.jobs_services_memory_swap}m"
+    } : key => value if value != null
+  }
+
   jobs_volumes = concat(var.jobs_volumes, [
     "${local.host_builds_directory}:${local.container_builds_directory}:rw",
     "${local.host_cache_directory}:${local.container_cache_directory}:rw",

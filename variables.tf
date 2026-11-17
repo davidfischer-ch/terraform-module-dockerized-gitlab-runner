@@ -362,3 +362,114 @@ variable "jobs_volumes" {
   description = "Additional volume mounts to pass to runner jobs."
   default     = []
 }
+
+# Jobs Resources -----------------------------------------------------------------------------------
+# https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
+
+variable "jobs_cgroup_parent" {
+  type        = string
+  description = <<EOT
+    Parent cgroup of the job containers and of their services, which then share its limits. With
+    Docker's systemd cgroup driver, a slice (e.g. `ci.slice`). Null: Docker's default.
+EOT
+  default     = null
+
+  validation {
+    condition     = var.jobs_cgroup_parent == null || can(regex("^[A-Za-z0-9_.@:/-]+$", var.jobs_cgroup_parent))
+    error_message = "Argument `jobs_cgroup_parent` must be a cgroup or slice name, without spaces or quotes."
+  }
+}
+
+variable "jobs_memory" {
+  type        = number
+  description = "Memory limit of each job container, in MB. Null: unlimited."
+  default     = null
+
+  validation {
+    condition     = var.jobs_memory == null || try(var.jobs_memory >= 64, false)
+    error_message = "Argument `jobs_memory` must be at least 64 (MB)."
+  }
+}
+
+variable "jobs_memory_swap" {
+  type        = number
+  description = <<EOT
+    Memory and swap limit of each job container together, in MB: equal to `jobs_memory`, the job
+    cannot swap. Requires `jobs_memory`. Null: twice `jobs_memory`, Docker's default.
+EOT
+  default     = null
+
+  validation {
+    condition     = var.jobs_memory_swap == null || try(var.jobs_memory != null && var.jobs_memory_swap >= var.jobs_memory, false)
+    error_message = "Argument `jobs_memory_swap` requires `jobs_memory` and must be at least its value."
+  }
+}
+
+variable "jobs_cpus" {
+  type        = number
+  description = "Number of CPUs each job container can use (e.g. 1.5). Null: unlimited."
+  default     = null
+
+  validation {
+    condition     = var.jobs_cpus == null || try(var.jobs_cpus > 0, false)
+    error_message = "Argument `jobs_cpus` must be positive."
+  }
+}
+
+variable "jobs_cpu_shares" {
+  type        = number
+  description = "CPU weight of each job container against the other containers, Docker's default being 1024. Null: the default."
+  default     = null
+
+  validation {
+    condition     = var.jobs_cpu_shares == null || try(var.jobs_cpu_shares >= 2 && floor(var.jobs_cpu_shares) == var.jobs_cpu_shares, false)
+    error_message = "Argument `jobs_cpu_shares` must be an integer of at least 2."
+  }
+}
+
+variable "jobs_services_memory" {
+  type        = number
+  description = "Memory limit of each service container, in MB. Null: unlimited."
+  default     = null
+
+  validation {
+    condition     = var.jobs_services_memory == null || try(var.jobs_services_memory >= 64, false)
+    error_message = "Argument `jobs_services_memory` must be at least 64 (MB)."
+  }
+}
+
+variable "jobs_services_memory_swap" {
+  type        = number
+  description = <<EOT
+    Memory and swap limit of each service container together, in MB. Requires
+    `jobs_services_memory`. Null: twice `jobs_services_memory`, Docker's default.
+EOT
+  default     = null
+
+  validation {
+    condition     = var.jobs_services_memory_swap == null || try(var.jobs_services_memory != null && var.jobs_services_memory_swap >= var.jobs_services_memory, false)
+    error_message = "Argument `jobs_services_memory_swap` requires `jobs_services_memory` and must be at least its value."
+  }
+}
+
+variable "jobs_services_cpus" {
+  type        = number
+  description = "Number of CPUs each service container can use. Null: unlimited."
+  default     = null
+
+  validation {
+    condition     = var.jobs_services_cpus == null || try(var.jobs_services_cpus > 0, false)
+    error_message = "Argument `jobs_services_cpus` must be positive."
+  }
+}
+
+variable "jobs_services_cpu_shares" {
+  type        = number
+  description = "CPU weight of each service container, Docker's default being 1024. Null: the default."
+  default     = null
+
+  validation {
+    condition     = var.jobs_services_cpu_shares == null || try(var.jobs_services_cpu_shares >= 2 && floor(var.jobs_services_cpu_shares) == var.jobs_services_cpu_shares, false)
+    error_message = "Argument `jobs_services_cpu_shares` must be an integer of at least 2."
+  }
+}

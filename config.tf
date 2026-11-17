@@ -51,6 +51,9 @@ listen_address = "[::]:9252"
     shm_size = 0
     tls_verify = false
     volumes = ${jsonencode(local.jobs_volumes)}
+%{~for key, value in local.jobs_resources}
+    ${key} = ${jsonencode(value)}
+%{~endfor}
 
 EOT
 }
