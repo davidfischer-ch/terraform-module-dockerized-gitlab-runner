@@ -122,14 +122,14 @@ data_directory/
 | `jobs_privileged` | `bool` | `false` | Run job containers in privileged mode. |
 | `jobs_volumes` | `list(string)` | `[]` | Additional volume mounts for jobs. |
 | `jobs_cgroup_parent` | `string` | `null` | Parent cgroup of the job and service containers, a slice with Docker's systemd driver (e.g. `ci.slice`): they share its limits. |
+| `jobs_cpu_shares` | `number` | `null` | CPU weight of each job container (Docker's default: 1024). |
+| `jobs_cpus` | `number` | `null` | CPUs each job container can use (e.g. `1.5`). |
 | `jobs_memory` | `number` | `null` | Memory limit of each job container in MB (minimum 64). |
 | `jobs_memory_swap` | `number` | `null` | Memory plus swap limit of each job container in MB; equal to `jobs_memory`, no swap. |
-| `jobs_cpus` | `number` | `null` | CPUs each job container can use (e.g. `1.5`). |
-| `jobs_cpu_shares` | `number` | `null` | CPU weight of each job container (Docker's default: 1024). |
+| `jobs_services_cpu_shares` | `number` | `null` | CPU weight of each service container (Docker's default: 1024). |
+| `jobs_services_cpus` | `number` | `null` | CPUs each service container can use. |
 | `jobs_services_memory` | `number` | `null` | Memory limit of each service container in MB (minimum 64). |
 | `jobs_services_memory_swap` | `number` | `null` | Memory plus swap limit of each service container in MB. |
-| `jobs_services_cpus` | `number` | `null` | CPUs each service container can use. |
-| `jobs_services_cpu_shares` | `number` | `null` | CPU weight of each service container (Docker's default: 1024). |
 
 ## Requirements
 

@@ -380,6 +380,28 @@ EOT
   }
 }
 
+variable "jobs_cpu_shares" {
+  type        = number
+  description = "CPU weight of each job container against the other containers, Docker's default being 1024. Null: the default."
+  default     = null
+
+  validation {
+    condition     = var.jobs_cpu_shares == null || try(var.jobs_cpu_shares >= 2 && floor(var.jobs_cpu_shares) == var.jobs_cpu_shares, false)
+    error_message = "Argument `jobs_cpu_shares` must be an integer of at least 2."
+  }
+}
+
+variable "jobs_cpus" {
+  type        = number
+  description = "Number of CPUs each job container can use (e.g. 1.5). Null: unlimited."
+  default     = null
+
+  validation {
+    condition     = var.jobs_cpus == null || try(var.jobs_cpus > 0, false)
+    error_message = "Argument `jobs_cpus` must be positive."
+  }
+}
+
 variable "jobs_memory" {
   type        = number
   description = "Memory limit of each job container, in MB. Null: unlimited."
@@ -405,25 +427,25 @@ EOT
   }
 }
 
-variable "jobs_cpus" {
+variable "jobs_services_cpu_shares" {
   type        = number
-  description = "Number of CPUs each job container can use (e.g. 1.5). Null: unlimited."
+  description = "CPU weight of each service container, Docker's default being 1024. Null: the default."
   default     = null
 
   validation {
-    condition     = var.jobs_cpus == null || try(var.jobs_cpus > 0, false)
-    error_message = "Argument `jobs_cpus` must be positive."
+    condition     = var.jobs_services_cpu_shares == null || try(var.jobs_services_cpu_shares >= 2 && floor(var.jobs_services_cpu_shares) == var.jobs_services_cpu_shares, false)
+    error_message = "Argument `jobs_services_cpu_shares` must be an integer of at least 2."
   }
 }
 
-variable "jobs_cpu_shares" {
+variable "jobs_services_cpus" {
   type        = number
-  description = "CPU weight of each job container against the other containers, Docker's default being 1024. Null: the default."
+  description = "Number of CPUs each service container can use. Null: unlimited."
   default     = null
 
   validation {
-    condition     = var.jobs_cpu_shares == null || try(var.jobs_cpu_shares >= 2 && floor(var.jobs_cpu_shares) == var.jobs_cpu_shares, false)
-    error_message = "Argument `jobs_cpu_shares` must be an integer of at least 2."
+    condition     = var.jobs_services_cpus == null || try(var.jobs_services_cpus > 0, false)
+    error_message = "Argument `jobs_services_cpus` must be positive."
   }
 }
 
@@ -449,27 +471,5 @@ EOT
   validation {
     condition     = var.jobs_services_memory_swap == null || try(var.jobs_services_memory != null && var.jobs_services_memory_swap >= var.jobs_services_memory, false)
     error_message = "Argument `jobs_services_memory_swap` requires `jobs_services_memory` and must be at least its value."
-  }
-}
-
-variable "jobs_services_cpus" {
-  type        = number
-  description = "Number of CPUs each service container can use. Null: unlimited."
-  default     = null
-
-  validation {
-    condition     = var.jobs_services_cpus == null || try(var.jobs_services_cpus > 0, false)
-    error_message = "Argument `jobs_services_cpus` must be positive."
-  }
-}
-
-variable "jobs_services_cpu_shares" {
-  type        = number
-  description = "CPU weight of each service container, Docker's default being 1024. Null: the default."
-  default     = null
-
-  validation {
-    condition     = var.jobs_services_cpu_shares == null || try(var.jobs_services_cpu_shares >= 2 && floor(var.jobs_services_cpu_shares) == var.jobs_services_cpu_shares, false)
-    error_message = "Argument `jobs_services_cpu_shares` must be an integer of at least 2."
   }
 }
