@@ -1,5 +1,14 @@
 # Changelog
 
+## Release v2.2.0 (2026-11-17)
+
+### Features
+
+* Add `jobs_cgroup_parent`, the parent cgroup of the job and service containers, which then share
+  its limits (a systemd slice with Docker's systemd cgroup driver)
+* Add per-container memory, swap and CPU limits for the jobs (`jobs_memory`, `jobs_memory_swap`,
+  `jobs_cpus`, `jobs_cpu_shares`) and their services (`jobs_services_*`), all unset by default
+
 ## Release v2.1.1 (2026-03-14)
 
 ### Fix and enhancements
