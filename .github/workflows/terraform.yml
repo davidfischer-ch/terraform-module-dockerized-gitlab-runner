@@ -1,0 +1,40 @@
+---
+# Check the module on every push and pull request: formatting, validation and its tests, on the
+# Terraform release `required_version` names, with the newest providers and with their minimums.
+name: Terraform
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        provider: [newest, minimum]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e  # v4.0.1
+        with:
+          terraform_version: '1.17'
+          terraform_wrapper: false
+      - if: matrix.provider == 'minimum'
+        run: |
+          cat > versions_override.tf <<'HCL'
+          terraform {
+            required_providers {
+              docker = { source = "kreuzwerker/docker", version = "= 4.7.0" }
+              gitlab = { source = "gitlabhq/gitlab", version = "= 16.8.1" }
+              local  = { source = "hashicorp/local", version = "= 2.4.1" }
+            }
+          }
+          HCL
+      - run: terraform fmt -check -diff -recursive
+      - run: terraform init -backend=false
+      - run: terraform validate
+      - run: terraform test
+...
