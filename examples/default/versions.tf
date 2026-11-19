@@ -5,7 +5,7 @@ terraform {
     # https://github.com/kreuzwerker/terraform-provider-docker/tags
     docker = {
       source  = "kreuzwerker/docker"
-      version = ">= 3.0.2"
+      version = ">= 4.7.0"
     }
 
     # https://github.com/gitlabhq/terraform-provider-gitlab/tags
