@@ -1,5 +1,48 @@
 # Changelog
 
+
+## Release v2.3.0 (2026-11-19)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-gitlab-runner/compare/2.2.0...2.3.0
+
+### Minor compatibility breaks
+
+Runner:
+
+* Publish the metrics on `127.0.0.1` by default, any address through the new `listener_address` input
+    * A Prometheus scraping the runner from another host needs `listener_address` set
+
+### Features
+
+Actions:
+
+* Add a `verify` action, failing unless the GitLab server reports the runner valid
+
+CI:
+
+* Add CI: formatting, validation and the tests, in the GitHub workflow (with the newest providers and their minimums) and in the GitLab pipeline
+
+### Fix and enhancements
+
+Runner:
+
+* Keep the runner token out of the container's environment, in a `0600` file the entrypoint reads
+    * The container is replaced once on upgrade
+* Run the healthcheck, its test given in the exec form Docker expects
+* Give a stopping runner `jobs_timeout` to finish its jobs
+    * An apply that destroys or replaces the runner waits up to `jobs_timeout` plus 60 seconds
+* Quote the storage path of the `chmod` provisioner
+
+Requirements:
+
+* Require Terraform 1.17
+* Require the Docker provider 4.7.0
+
+Docs:
+
+* Point the README and the examples at this release
+
+
 ## Release v2.2.0 (2026-11-17)
 
 ### Features
