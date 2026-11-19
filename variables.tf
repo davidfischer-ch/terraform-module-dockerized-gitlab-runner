@@ -149,8 +149,8 @@ variable "server_ca_cert" {
 variable "check_interval" {
   type        = number
   description = <<EOT
-    Defines the interval length, in seconds, between the runner checking for new jobs.
-    See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#how-check_interval-works.
+    Defines the interval length, in seconds, between the runner checking for new jobs. See
+    https://docs.gitlab.com/runner/configuration/advanced-configuration.html#how-check_interval-works.
   EOT
   default     = 3
 
@@ -198,8 +198,11 @@ variable "log_level" {
   default     = "warn"
 
   validation {
-    condition     = contains(["debug", "info", "warn", "error", "fatal", "panic"], var.log_level)
-    error_message = "Argument `log_level` must be one of \"debug\", \"info\", \"warn\", \"error\", \"fatal\", or \"panic\"."
+    condition = contains(["debug", "info", "warn", "error", "fatal", "panic"], var.log_level)
+    error_message = join(" ", [
+      "Argument `log_level` must be one of",
+      "\"debug\", \"info\", \"warn\", \"error\", \"fatal\", or \"panic\".",
+    ])
   }
 }
 
@@ -225,7 +228,7 @@ variable "jobs_concurrency" {
   type        = number
   description = <<EOT
     How many jobs can be handled concurrently by this registered runner. 0 means unlimited.
-    See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section.
+    See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
 EOT
   default     = 0 # jobs
 
@@ -261,7 +264,7 @@ variable "jobs_output_limit" {
   type        = number
   description = <<EOT
     Maximum build log size in kilobytes.
-    See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section.
+    See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
 EOT
   default     = 4096 # 4 MB
 
@@ -281,7 +284,7 @@ variable "jobs_requests_concurrency" {
   type        = number
   description = <<EOT
     Limit number of concurrent requests for new jobs from GitLab.
-    See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section.
+    See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
 EOT
   default     = 1 # requests
 
@@ -346,7 +349,10 @@ variable "jobs_allowed_services" {
 # https://docs.gitlab.com/runner/executors/docker.html#using-multiple-pull-policies
 variable "jobs_pull_policy" {
   type        = list(string)
-  description = "Will be attempted in order from left to right until a pull attempt is successful, or the list is exhausted."
+  description = <<-EOT
+    Will be attempted in order from left to right until a pull attempt is successful, or the list
+    is exhausted.
+  EOT
   default     = ["always", "if-not-present"]
 }
 
@@ -375,18 +381,29 @@ EOT
   default     = null
 
   validation {
-    condition     = var.jobs_cgroup_parent == null || can(regex("^[A-Za-z0-9_.@:/-]+$", var.jobs_cgroup_parent))
-    error_message = "Argument `jobs_cgroup_parent` must be a cgroup or slice name, without spaces or quotes."
+    condition = (
+      var.jobs_cgroup_parent == null
+      || can(regex("^[A-Za-z0-9_.@:/-]+$", var.jobs_cgroup_parent))
+    )
+    error_message = join(" ", [
+      "Argument `jobs_cgroup_parent` must be a cgroup or slice name,",
+      "without spaces or quotes.",
+    ])
   }
 }
 
 variable "jobs_cpu_shares" {
   type        = number
-  description = "CPU weight of each job container against the other containers, Docker's default being 1024. Null: the default."
+  description = <<-EOT
+    CPU weight of each job container against the other containers, Docker's default being 1024.
+    Null: the default.
+  EOT
   default     = null
 
   validation {
-    condition     = var.jobs_cpu_shares == null || try(var.jobs_cpu_shares >= 2 && floor(var.jobs_cpu_shares) == var.jobs_cpu_shares, false)
+    condition = var.jobs_cpu_shares == null || try(
+      var.jobs_cpu_shares >= 2 && floor(var.jobs_cpu_shares) == var.jobs_cpu_shares, false
+    )
     error_message = "Argument `jobs_cpu_shares` must be an integer of at least 2."
   }
 }
@@ -422,18 +439,29 @@ EOT
   default     = null
 
   validation {
-    condition     = var.jobs_memory_swap == null || try(var.jobs_memory != null && var.jobs_memory_swap >= var.jobs_memory, false)
-    error_message = "Argument `jobs_memory_swap` requires `jobs_memory` and must be at least its value."
+    condition = var.jobs_memory_swap == null || try(
+      var.jobs_memory != null && var.jobs_memory_swap >= var.jobs_memory, false
+    )
+    error_message = join(" ", [
+      "Argument `jobs_memory_swap` requires `jobs_memory`",
+      "and must be at least its value.",
+    ])
   }
 }
 
 variable "jobs_services_cpu_shares" {
   type        = number
-  description = "CPU weight of each service container, Docker's default being 1024. Null: the default."
+  description = <<-EOT
+    CPU weight of each service container, Docker's default being 1024. Null: the default.
+  EOT
   default     = null
 
   validation {
-    condition     = var.jobs_services_cpu_shares == null || try(var.jobs_services_cpu_shares >= 2 && floor(var.jobs_services_cpu_shares) == var.jobs_services_cpu_shares, false)
+    condition = var.jobs_services_cpu_shares == null || try(
+      var.jobs_services_cpu_shares >= 2
+      && floor(var.jobs_services_cpu_shares) == var.jobs_services_cpu_shares,
+      false
+    )
     error_message = "Argument `jobs_services_cpu_shares` must be an integer of at least 2."
   }
 }
@@ -469,7 +497,14 @@ EOT
   default     = null
 
   validation {
-    condition     = var.jobs_services_memory_swap == null || try(var.jobs_services_memory != null && var.jobs_services_memory_swap >= var.jobs_services_memory, false)
-    error_message = "Argument `jobs_services_memory_swap` requires `jobs_services_memory` and must be at least its value."
+    condition = var.jobs_services_memory_swap == null || try(
+      var.jobs_services_memory != null
+      && var.jobs_services_memory_swap >= var.jobs_services_memory,
+      false
+    )
+    error_message = join(" ", [
+      "Argument `jobs_services_memory_swap` requires `jobs_services_memory`",
+      "and must be at least its value.",
+    ])
   }
 }

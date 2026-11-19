@@ -39,9 +39,15 @@ locals {
       memory_swap           = var.jobs_memory_swap == null ? null : "${var.jobs_memory_swap}m"
       service_cgroup_parent = var.jobs_cgroup_parent
       service_cpu_shares    = var.jobs_services_cpu_shares
-      service_cpus          = var.jobs_services_cpus == null ? null : tostring(var.jobs_services_cpus)
-      service_memory        = var.jobs_services_memory == null ? null : "${var.jobs_services_memory}m"
-      service_memory_swap   = var.jobs_services_memory_swap == null ? null : "${var.jobs_services_memory_swap}m"
+      service_cpus = (
+        var.jobs_services_cpus == null ? null : tostring(var.jobs_services_cpus)
+      )
+      service_memory = (
+        var.jobs_services_memory == null ? null : "${var.jobs_services_memory}m"
+      )
+      service_memory_swap = (
+        var.jobs_services_memory_swap == null ? null : "${var.jobs_services_memory_swap}m"
+      )
     } : key => value if value != null
   }
 

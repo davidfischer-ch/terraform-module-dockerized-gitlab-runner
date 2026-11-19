@@ -1,6 +1,7 @@
 # GitLab Runner Terraform Module (Dockerized)
 
-Manage a GitLab Runner using the [Docker Executor](https://docs.gitlab.com/runner/executors/docker.html).
+Manage a GitLab Runner using the
+[Docker Executor](https://docs.gitlab.com/runner/executors/docker.html).
 
 > **Limitation:** Multi-runner examples is not yet supported or documented.
 
@@ -8,6 +9,7 @@ Manage a GitLab Runner using the [Docker Executor](https://docs.gitlab.com/runne
 * Unregisters the runner at destruction time (clean GitLab state)
 * Stores the authentication token as an environment variable — not hardcoded in `config.toml`
 * Any configuration change is reflected to the appropriate resources automatically
+
 
 ## Usage
 
@@ -59,6 +61,7 @@ module "runner" {
 }
 ```
 
+
 ## Data layout
 
 All persistent data lives under `data_directory`:
@@ -75,6 +78,7 @@ data_directory/
         ├── check-live
         └── entrypoint
 ```
+
 
 ## Variables
 
@@ -130,6 +134,7 @@ data_directory/
 | `jobs_services_cpus` | `number` | `null` | CPUs each service container can use. |
 | `jobs_services_memory` | `number` | `null` | Memory limit of each service container in MB (minimum 64). |
 | `jobs_services_memory_swap` | `number` | `null` | Memory plus swap limit of each service container in MB. |
+
 
 ## Requirements
 
