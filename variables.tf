@@ -319,7 +319,8 @@ variable "jobs_tags" {
 variable "jobs_timeout" {
   type        = number
   description = <<EOT
-    Gives the jobs time to complete (in seconds).
+    Gives the jobs time to complete (in seconds). An apply that destroys or replaces the runner
+    waits up to this long, plus 60 seconds, for its running jobs.
     See https://docs.gitlab.com/ee/api/runners.html.
   EOT
   default     = 3600

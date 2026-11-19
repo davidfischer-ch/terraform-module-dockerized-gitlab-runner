@@ -122,7 +122,7 @@ data_directory/
 | `jobs_requests_concurrency` | `number` | `1` | Max concurrent job requests to GitLab. |
 | `jobs_run_untagged` | `bool` | `false` | Run untagged jobs. |
 | `jobs_tags` | `list(string)` | — | Runner tags for job dispatch. |
-| `jobs_timeout` | `number` | `3600` | Job timeout in seconds. |
+| `jobs_timeout` | `number` | `3600` | Job timeout in seconds; an apply that destroys or replaces the runner waits up to this long, plus 60 seconds, for its running jobs. |
 | `jobs_allowed_images` | `list(string)` | `["*/*:*"]` | Allowed image patterns. |
 | `jobs_allowed_pull_policies` | `list(string)` | `["always", "if-not-present", "never"]` | Allowed pull policies. |
 | `jobs_allowed_services` | `list(string)` | `["*/*:*"]` | Allowed service image patterns. |
@@ -146,6 +146,21 @@ data_directory/
 * [kreuzwerker/docker](https://github.com/kreuzwerker/terraform-provider-docker) >= 4.7.0
 * [gitlabhq/gitlab](https://github.com/gitlabhq/terraform-provider-gitlab) >= 16.8.1
 * [hashicorp/local](https://github.com/hashicorp/terraform-provider-local) >= 2.4.1
+
+
+## Tests
+
+```bash
+terraform init -backend=false
+terraform test
+```
+
+`terraform test` needs Terraform >= 1.17, the module's own floor. The tests plan against mocked
+providers: they assert what the module renders and passes to Docker (ports, env, healthcheck, the
+storage command's text, the entrypoint), and run neither the entrypoint, the provisioner nor the
+runner. They run on every push, in the GitHub workflow (with the newest providers and with their
+minimums) and in the GitLab pipeline.
+
 
 ## References
 

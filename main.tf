@@ -27,6 +27,14 @@ resource "docker_container" "runner" {
   stop_signal  = "SIGQUIT"
   stop_timeout = var.jobs_timeout
 
+  # Terraform stops the container with this timeout, never with `stop_timeout`.
+  destroy_grace_seconds = var.jobs_timeout
+
+  # The provider's own deadline for a delete (20 minutes by default) must outlast that grace.
+  timeouts {
+    delete = "${var.jobs_timeout + 60}s"
+  }
+
   env = formatlist("%s=%s", keys(local.env), values(local.env))
 
   dynamic "host" {
