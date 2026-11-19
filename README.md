@@ -157,9 +157,25 @@ terraform test
 
 `terraform test` needs Terraform >= 1.17, the module's own floor. The tests plan against mocked
 providers: they assert what the module renders and passes to Docker (ports, env, healthcheck, the
-storage command's text, the entrypoint), and run neither the entrypoint, the provisioner nor the
-runner. They run on every push, in the GitHub workflow (with the newest providers and with their
-minimums) and in the GitLab pipeline.
+storage command's text, the entrypoint), and run neither the entrypoint, the provisioner, the runner
+nor the `verify` action. They run on every push, in the GitHub workflow (with the newest providers
+and with their minimums) and in the GitLab pipeline.
+
+
+## Actions
+
+On-demand operations on the runner. Each runs only when invoked, never during an ordinary `apply`,
+and leaves nothing in the state:
+
+```bash
+terraform apply -invoke='module.runner.action.docker_exec.<action>'
+```
+
+Replace `module.runner` with the module's address.
+
+| Action | What it does | When |
+|--------|--------------|------|
+| `verify` | `gitlab-runner verify`: the registration checked against the GitLab server; fails unless the runner is reported valid | After a token rotation, or when jobs stay pending |
 
 
 ## References
