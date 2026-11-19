@@ -87,6 +87,14 @@ variable "hosts" {
   default     = {}
 }
 
+variable "listener_address" {
+  type        = string
+  description = <<-EOT
+    Address the published ports bind to. `0.0.0.0` offers them to every network the host is on.
+  EOT
+  default     = "127.0.0.1"
+}
+
 variable "metrics_port" {
   type        = number
   description = "Host port used to expose the runner's Prometheus metrics exporter."

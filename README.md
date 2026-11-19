@@ -99,6 +99,7 @@ data_directory/
 | `memory` | `number` | `512` | Memory limit in MB (minimum 64). |
 | `swap` | `number` | `128` | Swap limit in MB. |
 | `hosts` | `map(string)` | `{}` | Extra `/etc/hosts` entries for the container. |
+| `listener_address` | `string` | `"127.0.0.1"` | Address the published ports bind to. |
 | `metrics_port` | `number` | `9252` | Host port for Prometheus metrics. |
 | `data_directory` | `string` | — | Host path for persistent volumes. |
 | `runner_type` | `string` | — | Runner scope: `instance`, `group`, or `project`. |

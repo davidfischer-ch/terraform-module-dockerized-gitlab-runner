@@ -52,7 +52,7 @@ resource "docker_container" "runner" {
     content {
       internal = 9252
       external = var.metrics_port
-      ip       = "0.0.0.0"
+      ip       = var.listener_address
       protocol = "tcp"
     }
   }
