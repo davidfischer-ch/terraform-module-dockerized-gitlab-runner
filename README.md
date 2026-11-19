@@ -138,7 +138,7 @@ data_directory/
 
 ## Requirements
 
-* Terraform >= 1.6
+* Terraform >= 1.17
 * [kreuzwerker/docker](https://github.com/kreuzwerker/terraform-provider-docker) >= 3.0.2
 * [gitlabhq/gitlab](https://github.com/gitlabhq/terraform-provider-gitlab) >= 16.8.1
 * [hashicorp/local](https://github.com/hashicorp/terraform-provider-local) >= 2.4.1
