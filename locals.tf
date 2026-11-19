@@ -19,6 +19,9 @@ locals {
     CONFIG_FILE   = "/tmp/config.toml"
   })
 
+  # The path is one single-quoted shell word, whatever characters it holds.
+  storage_command = "chmod 1777 '${replace(local.host_storage_directory, "'", "'\\''")}'"
+
   jobs_env = merge(var.jobs_env, {
     # Fix the helper image trying to write to / directory
     HOME = "/tmp"

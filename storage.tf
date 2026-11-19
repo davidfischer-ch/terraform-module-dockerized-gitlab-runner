@@ -8,6 +8,6 @@ resource "local_file" "jobs_storage_touch" {
 
   # https://github.com/hashicorp/terraform-provider-local/issues/366
   provisioner "local-exec" {
-    command = "chmod 1777 ${local.host_storage_directory}"
+    command = local.storage_command
   }
 }
