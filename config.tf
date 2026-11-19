@@ -58,6 +58,15 @@ listen_address = "[::]:9252"
 EOT
 }
 
+# Read by the entrypoint, which keeps the token out of the container's environment.
+resource "local_sensitive_file" "token" {
+  filename             = "${local.host_config_directory}/token"
+  file_permission      = "0600"
+  directory_permission = "0755"
+
+  content = gitlab_user_runner.self.token
+}
+
 resource "local_sensitive_file" "server_ca_cert" {
   # Marked as sensitive also to hide its content on diff
   count = var.server_ca_cert == null ? 0 : 1

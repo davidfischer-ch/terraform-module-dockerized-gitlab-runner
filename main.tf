@@ -4,7 +4,8 @@ resource "docker_container" "runner" {
     replace_triggered_by = [
       local_file.config,
       local_file.check_live,
-      local_file.entrypoint
+      local_file.entrypoint,
+      local_sensitive_file.token
     ]
   }
 

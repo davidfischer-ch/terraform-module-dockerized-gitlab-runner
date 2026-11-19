@@ -7,7 +7,9 @@ Manage a GitLab Runner using the
 
 * Registers the runner once at creation time (taint `gitlab_runner.runner` to force re-registration)
 * Unregisters the runner at destruction time (clean GitLab state)
-* Stores the authentication token as an environment variable — not hardcoded in `config.toml`
+* Keeps the authentication token out of the container's environment and of the rendered
+  `config.toml`: the entrypoint reads it from a file readable by its owner alone (`0600`, owned by
+  whoever runs Terraform)
 * Any configuration change is reflected to the appropriate resources automatically
 
 
@@ -73,7 +75,8 @@ data_directory/
     ├── cache/
     ├── config/
     │   ├── certs/
-    │   └── config.toml
+    │   ├── config.toml
+    │   └── token
     └── scripts/
         ├── check-live
         └── entrypoint

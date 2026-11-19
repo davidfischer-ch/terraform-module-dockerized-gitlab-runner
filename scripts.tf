@@ -7,9 +7,12 @@ resource "local_file" "entrypoint" {
 #!/bin/bash
 set -e
 
-# HACK FOR : Allow token to be passed by environment variable
-# See: https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2458
-sed -e "s:__RUNNER_TOKEN__:$RUNNER_TOKEN:g" "$TEMPLATE_FILE" > "$CONFIG_FILE"
+# Builtins substitute the token, keeping it out of every process's arguments, into a file only
+# root reads. See https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2458.
+umask 077
+template=$(<"$TEMPLATE_FILE")
+token=$(<"$TOKEN_FILE")
+printf '%s\n' "$${template//__RUNNER_TOKEN__/"$token"}" > "$CONFIG_FILE"
 
 echo "Start the runner"
 exec /entrypoint run \

@@ -14,8 +14,8 @@ locals {
 
   env = merge(var.env, {
     HOME          = local.container_home_directory
-    RUNNER_TOKEN  = gitlab_user_runner.self.token
     TEMPLATE_FILE = "${local.container_config_directory}/config.toml"
+    TOKEN_FILE    = "${local.container_config_directory}/token"
     CONFIG_FILE   = "/tmp/config.toml"
   })
 
