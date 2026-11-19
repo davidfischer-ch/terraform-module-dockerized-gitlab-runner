@@ -61,7 +61,7 @@ resource "docker_container" "runner" {
     interval     = "10s"
     retries      = 3
     start_period = "1m0s"
-    test         = ["/bin/bash", "${local.container_scripts_directory}/check-live"]
+    test         = ["CMD", "/bin/bash", "${local.container_scripts_directory}/check-live"]
     timeout      = "1s"
   }
 
