@@ -1,6 +1,7 @@
 ---
-# Check the module on every push and pull request: formatting, validation and its tests, on the
-# Terraform release `required_version` names, with the newest providers and with their minimums.
+# Check the module on every push and pull request: formatting, validation and its tests, at both
+# ends of versions.tf: the newest Terraform and providers, and the oldest it accepts. Every version
+# is read from versions.tf at run time, which leaves nothing in this file to bump.
 name: Terraform
 
 on:
@@ -15,24 +16,41 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        provider: [newest, minimum]
+        versions: [newest, minimum]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # The floors of versions.tf: Terraform's as a range of its patches, each provider's pinned in
+      # versions_override.tf.
+      - id: floors
+        if: matrix.versions == 'minimum'
+        shell: python3 {0}
+        run: |
+          import os, pathlib, re
+          text = re.sub(r'#[^\n]*', '', pathlib.Path('versions.tf').read_text())
+          terraform = re.search(
+              r'required_version\s*=\s*">=\s*([0-9]+)\.([0-9]+)(?:\.([0-9]+))?"',
+              text,
+          )
+          providers = re.findall(
+              r'(\w+)\s*=\s*\{[^{}]*?source\s*=\s*"([^"]+)"[^{}]*?version\s*=\s*">=\s*([0-9.]+)"',
+              text,
+          )
+          assert terraform and len(providers) == text.count('source'), 'a floor versions.tf lacks'
+          width = max(len(name) for name, _, _ in providers)
+          pathlib.Path('versions_override.tf').write_text(''.join([
+              'terraform {\n  required_providers {\n',
+              *(f'    {name:<{width}} = {{ source = "{source}", version = "= {floor}" }}\n'
+                for name, source, floor in providers),
+              '  }\n}\n',
+          ]))
+          major, minor, patch = terraform.groups()
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'terraform=~{major}.{minor}.{patch or 0}\n')
       - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e  # v4.0.1
         with:
-          terraform_version: '1.17'
+          terraform_version: ${{ steps.floors.outputs.terraform || 'latest' }}
           terraform_wrapper: false
-      - if: matrix.provider == 'minimum'
-        run: |
-          cat > versions_override.tf <<'HCL'
-          terraform {
-            required_providers {
-              docker = { source = "kreuzwerker/docker", version = "= 4.7.0" }
-              gitlab = { source = "gitlabhq/gitlab", version = "= 16.8.1" }
-              local  = { source = "hashicorp/local", version = "= 2.4.1" }
-            }
-          }
-          HCL
+      - run: terraform version
       - run: terraform fmt -check -diff -recursive
       - run: terraform init -backend=false
       - run: terraform validate
@@ -50,7 +68,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e  # v4.0.1
         with:
-          terraform_version: '1.17'
+          terraform_version: latest
           terraform_wrapper: false
       - run: sudo env "PATH=$PATH" "E2E_IMAGE=$E2E_IMAGE" sh tests/e2e/run.sh
         env:
