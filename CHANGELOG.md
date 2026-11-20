@@ -1,6 +1,31 @@
 # Changelog
 
 
+## Release v2.3.1 (2026-11-20)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-gitlab-runner/compare/2.3.0...2.3.1
+
+### Features
+
+CI:
+
+* Add an end-to-end test of the module and its `verify` action against a real Docker daemon and a stub of the GitLab API, on GitLab Runner 19.5
+
+### Fix and enhancements
+
+Runner:
+
+* Refuse a `jobs_timeout` below 600 seconds, GitLab's minimum, at validation instead of a provider error at plan
+
+CI:
+
+* Test at both ends of `versions.tf`, every version read from it at run time: the newest Terraform and providers, and their floors
+
+Docs:
+
+* Fix the README's taint address (`gitlab_user_runner.self`) and its data layout
+
+
 ## Release v2.3.0 (2026-11-19)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-gitlab-runner/compare/2.2.0...2.3.0
