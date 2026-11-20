@@ -29,3 +29,13 @@ run "replacement_lets_the_jobs_drain" {
     ])
   }
 }
+
+run "jobs_timeout_below_the_gitlab_minimum_is_refused" {
+  command = plan
+
+  variables {
+    jobs_timeout = 599
+  }
+
+  expect_failures = [var.jobs_timeout]
+}

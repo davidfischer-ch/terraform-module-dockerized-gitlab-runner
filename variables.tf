@@ -326,8 +326,8 @@ variable "jobs_timeout" {
   default     = 3600
 
   validation {
-    condition     = var.jobs_timeout >= 1
-    error_message = "Argument `jobs_timeout` must be at least 1."
+    condition     = var.jobs_timeout >= 600
+    error_message = "Argument `jobs_timeout` must be at least 600, GitLab's minimum job timeout."
   }
 }
 
