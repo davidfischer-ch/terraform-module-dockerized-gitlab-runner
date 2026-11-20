@@ -3,4 +3,10 @@ include:
   - project: family/infrastructure/pipelines/development-pipelines
     file: pipelines/terraform/module.yml
     ref: main
+
+# The same scenarios as the e2e job of .github/workflows/terraform.yml.
+Terraform E2E:
+  parallel:
+    matrix:
+      - E2E_IMAGE: gitlab/gitlab-runner:ubuntu-v19.5.2
 ...

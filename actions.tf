@@ -1,7 +1,7 @@
 # On-demand operations on the runner, run with `terraform apply -invoke=<action address>`.
 
-# Check the runner's registration against the GitLab server from the report of
-# `gitlab-runner verify`, which exits 0 on a failed check.
+# Check the runner's registration against the GitLab server, from the report of
+# `gitlab-runner verify`.
 action "docker_exec" "verify" {
   config {
     container = docker_container.runner.name

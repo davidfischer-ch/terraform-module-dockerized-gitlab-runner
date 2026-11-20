@@ -37,4 +37,22 @@ jobs:
       - run: terraform init -backend=false
       - run: terraform validate
       - run: terraform test
+
+  # The module against the runner's Docker daemon and a stub of the GitLab API: tests/e2e/run.sh,
+  # on GitLab Runner 19.5. The same scenarios as the Terraform E2E job of .gitlab-ci.yml.
+  e2e:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: [gitlab/gitlab-runner:ubuntu-v19.5.2]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e  # v4.0.1
+        with:
+          terraform_version: '1.17'
+          terraform_wrapper: false
+      - run: sudo env "PATH=$PATH" "E2E_IMAGE=$E2E_IMAGE" sh tests/e2e/run.sh
+        env:
+          E2E_IMAGE: ${{ matrix.image }}
 ...

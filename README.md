@@ -5,7 +5,7 @@ Manage a GitLab Runner using the
 
 > **Limitation:** Multi-runner examples is not yet supported or documented.
 
-* Registers the runner once at creation time (taint `gitlab_runner.runner` to force re-registration)
+* Registers the runner once at creation time (taint `gitlab_user_runner.self` to force re-registration)
 * Unregisters the runner at destruction time (clean GitLab state)
 * Keeps the authentication token out of the container's environment and of the rendered
   `config.toml`: the entrypoint reads it from a file readable by its owner alone (`0600`, owned by
@@ -70,16 +70,16 @@ All persistent data lives under `data_directory`:
 
 ```
 data_directory/
-└── {identifier}/
-    ├── builds/
-    ├── cache/
-    ├── config/
-    │   ├── certs/
-    │   ├── config.toml
-    │   └── token
-    └── scripts/
-        ├── check-live
-        └── entrypoint
+├── builds/
+├── cache/
+├── config/
+│   ├── certs/
+│   ├── config.toml
+│   └── token
+├── scripts/
+│   ├── check-live
+│   └── entrypoint
+└── storage/
 ```
 
 
@@ -122,7 +122,7 @@ data_directory/
 | `jobs_requests_concurrency` | `number` | `1` | Max concurrent job requests to GitLab. |
 | `jobs_run_untagged` | `bool` | `false` | Run untagged jobs. |
 | `jobs_tags` | `list(string)` | — | Runner tags for job dispatch. |
-| `jobs_timeout` | `number` | `3600` | Job timeout in seconds; an apply that destroys or replaces the runner waits up to this long, plus 60 seconds, for its running jobs. |
+| `jobs_timeout` | `number` | `3600` | Job timeout in seconds, at least 600; an apply that destroys or replaces the runner waits up to this long, plus 60 seconds, for its running jobs. |
 | `jobs_allowed_images` | `list(string)` | `["*/*:*"]` | Allowed image patterns. |
 | `jobs_allowed_pull_policies` | `list(string)` | `["always", "if-not-present", "never"]` | Allowed pull policies. |
 | `jobs_allowed_services` | `list(string)` | `["*/*:*"]` | Allowed service image patterns. |
@@ -160,6 +160,23 @@ providers: they assert what the module renders and passes to Docker (ports, env,
 storage command's text, the entrypoint), and run neither the entrypoint, the provisioner, the runner
 nor the `verify` action. They run on every push, in the GitHub workflow (with the newest providers
 and with their minimums) and in the GitLab pipeline.
+
+`tests/e2e/run.sh` applies the module against a real Docker daemon and a stub of the GitLab API
+(`tests/e2e/stub.py`), which registers the runner and answers its job requests with no job. It
+checks the healthcheck, the token (in the `config.toml` the entrypoint writes, readable by its
+owner alone, and absent from the container's environment) and the metrics listener on loopback,
+runs `verify` on a valid and on a refused token, then destroys everything. The GitHub workflow and
+the GitLab pipeline run it on GitLab Runner 19.5; locally:
+
+```bash
+E2E_IMAGE=gitlab/gitlab-runner:ubuntu-v19.5.2 sh tests/e2e/run.sh
+```
+
+The Docker daemon must see the data directory at the same path: set `E2E_DATA_DIRECTORY` to a
+directory on a filesystem both share when Terraform runs in a container of its own. Terraform
+reaches the stub on port 19080, published on loopback, or on the daemon's host under a TCP
+`DOCKER_HOST`: set `E2E_STUB_ADDRESS` to another address of the daemon's host that Terraform
+reaches. The runner publishes its metrics on port 19252.
 
 
 ## Actions
